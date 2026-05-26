@@ -299,6 +299,65 @@
     to { transform: translate(-50%, 0); opacity: 1; }
   }
 
+  /* Action buttons */
+  .actions {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    animation: dropIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s backwards;
+  }
+
+  .btn {
+    font-family: 'Bagel Fat One', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    padding: 0.9rem 1.8rem;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-emoji { font-size: 1.4rem; line-height: 1; }
+  .btn-label { line-height: 1; }
+
+  .btn-yes {
+    background: linear-gradient(135deg, #FF7AB0 0%, #E84A85 100%);
+    box-shadow: 0 5px 0 #B83A6B, 0 10px 20px rgba(232, 74, 133, 0.35);
+  }
+
+  .btn-no {
+    background: linear-gradient(135deg, #C7A8E8 0%, #9B7FC4 100%);
+    box-shadow: 0 5px 0 #6E5499, 0 10px 20px rgba(155, 127, 196, 0.35);
+  }
+
+  .btn:hover {
+    transform: translateY(-2px) rotate(-1deg);
+    filter: brightness(1.05);
+  }
+  .btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #B83A6B, 0 4px 10px rgba(232, 74, 133, 0.3);
+  }
+  .btn-no:active {
+    box-shadow: 0 2px 0 #6E5499, 0 4px 10px rgba(155, 127, 196, 0.3);
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none !important;
+  }
+
   .footer-note {
     margin-top: 1.5rem;
     font-family: 'Caveat', cursive;
@@ -450,6 +509,17 @@
       <div class="date" id="updateDate">—</div>
     </div>
   </main>
+
+  <div class="actions" id="actions">
+    <button class="btn btn-yes" data-value="yes" type="button">
+      <span class="btn-emoji">💩</span>
+      <span class="btn-label">EVET</span>
+    </button>
+    <button class="btn btn-no" data-value="no" type="button">
+      <span class="btn-emoji">😔</span>
+      <span class="btn-label">HAYIR</span>
+    </button>
+  </div>
 
   <div class="footer-note">
     🌸 Kübra'nın kaka takip merkezi · v1.0 💩
@@ -611,7 +681,34 @@ async function init() {
 
 init();
 
-// Refresh every 30s in case someone else updates
+// Buton tıklamaları
+document.getElementById('actions').addEventListener('click', async (e) => {
+  const btn = e.target.closest('.btn');
+  if (!btn) return;
+  const value = btn.dataset.value;
+
+  // Tüm butonları kilitle
+  const buttons = document.querySelectorAll('#actions .btn');
+  buttons.forEach(b => b.disabled = true);
+
+  let data = null;
+  if (value === 'yes') {
+    data = await setStatusRemote('yes');
+    showAdminNotice(data ? '✅ EVET kaydedildi' : '⚠️ Hata oldu');
+  } else if (value === 'no') {
+    data = await setStatusRemote('no');
+    showAdminNotice(data ? '✅ HAYIR kaydedildi' : '⚠️ Hata oldu');
+  } else if (value === 'reset') {
+    await setStatusRemote('reset');
+    showAdminNotice('🔄 Sıfırlandı');
+    data = null;
+  }
+  render(data);
+
+  buttons.forEach(b => b.disabled = false);
+});
+
+// Her 30 saniyede bir tazele
 setInterval(async () => {
   const data = await loadStatus();
   render(data);
