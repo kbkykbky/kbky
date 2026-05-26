@@ -457,16 +457,20 @@
 </div>
 
 <script>
-// Status lives in ./status.json in the same repo.
-// To update: edit status.json on GitHub, commit, done.
-// GitHub Pages rebuilds in ~30s and everyone sees the new value.
+// ┌──────────────────────────────────────────────────────────────┐
+// │  Cloudflare Worker URL'ini buraya yapıştır.                  │
+// │  Kurulum talimatları için worker.js dosyasının üstüne bak.   │
+// └──────────────────────────────────────────────────────────────┘
+const API_URL = 'https://kubra-status.aricihh-kbky.workers.dev';
 
 const TR_DAYS = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
 const TR_MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
 
 function todayKey() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Istanbul',
+    year: 'numeric', month: '2-digit', day: '2-digit'
+  }).format(new Date());
 }
 
 function formatDate(iso) {
@@ -483,7 +487,18 @@ function formatDate(iso) {
 
 async function loadStatus() {
   try {
-    const r = await fetch('./status.json?t=' + Date.now(), { cache: 'no-store' });
+    const r = await fetch(API_URL + '/', { cache: 'no-store' });
+    if (!r.ok) return null;
+    const data = await r.json();
+    return (data && data.answer) ? data : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function setStatusRemote(value) {
+  try {
+    const r = await fetch(`${API_URL}/set?value=${encodeURIComponent(value)}`, { cache: 'no-store' });
     if (!r.ok) return null;
     const data = await r.json();
     return (data && data.answer) ? data : null;
@@ -567,21 +582,31 @@ function showAdminNotice(text) {
 }
 
 async function init() {
+  const params = new URLSearchParams(window.location.search);
+  const setParam = params.get('set');
+
+  // Gizli admin URL'leri: ?set=yes | ?set=no | ?set=reset
+  if (setParam) {
+    let data;
+    if (setParam === 'yes' || setParam === 'evet') {
+      data = await setStatusRemote('yes');
+      showAdminNotice(data ? '✅ EVET olarak kaydedildi' : '⚠️ Hata oldu');
+    } else if (setParam === 'no' || setParam === 'hayir') {
+      data = await setStatusRemote('no');
+      showAdminNotice(data ? '✅ HAYIR olarak kaydedildi' : '⚠️ Hata oldu');
+    } else if (setParam === 'reset' || setParam === 'clear') {
+      await setStatusRemote('reset');
+      showAdminNotice('🔄 Sıfırlandı');
+      data = null;
+    }
+    // URL'i temizle ki gizli parametre adres çubuğunda kalmasın
+    window.history.replaceState({}, document.title, window.location.pathname);
+    render(data);
+    return;
+  }
+
   const data = await loadStatus();
   render(data);
-
-  // Admin mode: ?admin in URL shows a link to edit status.json on GitHub.
-  // Fill in your repo path below if you want this shortcut.
-  if (new URLSearchParams(location.search).has('admin')) {
-    const REPO_EDIT_URL = 'https://github.com/YOUR_USERNAME/YOUR_REPO/edit/main/status.json';
-    showAdminNotice('düzenle: ' + REPO_EDIT_URL);
-    const link = document.createElement('a');
-    link.href = REPO_EDIT_URL;
-    link.target = '_blank';
-    link.textContent = '✏️ status.json düzenle';
-    link.style.cssText = 'position:fixed;bottom:1rem;right:1rem;background:var(--text);color:#fff;padding:.6rem 1rem;border-radius:100px;text-decoration:none;font-family:Fredoka;font-size:.9rem;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.2)';
-    document.body.appendChild(link);
-  }
 }
 
 init();
