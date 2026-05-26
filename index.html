@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kübra bugün kaka yaptı mı?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Fredoka:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFE9F1;
+    --bg-soft: #FFD6E5;
+    --pink: #FF9EBF;
+    --pink-deep: #FF6FA3;
+    --pink-hot: #E84A85;
+    --rose-dark: #B83A6B;
+    --peach: #FFC7B8;
+    --cream: #FFF5F8;
+    --lavender: #E6C9FF;
+    --yes: #FF6FA3;
+    --yes-dark: #C73E73;
+    --no: #B69BD9;
+    --no-dark: #6E5499;
+    --gold: #FFD66B;
+    --text: #6B2E4D;
+    --text-soft: #B07A92;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    min-height: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    background: #FFFFFF;
+    min-height: 100vh;
+    color: var(--text);
+    position: relative;
+    padding: 2rem 1rem 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  /* Funny poop stains scattered around */
+  .stain {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.85;
+    --rot: 0deg;
+    transform: rotate(var(--rot));
+  }
+  .stain.s1 { top: 5%;  left: 3%;  width: 140px; --rot: -15deg; }
+  .stain.s2 { top: 12%; right: 4%; width: 180px; --rot: 25deg; }
+  .stain.s3 { top: 48%; left: 2%;  width: 110px; --rot: -40deg; }
+  .stain.s4 { bottom: 8%; right: 5%; width: 160px; --rot: 15deg; }
+  .stain.s5 { bottom: 25%; left: 6%; width: 130px; --rot: 60deg; }
+  .stain.s6 { top: 35%; right: 12%; width: 90px; --rot: -20deg; }
+  .stain.s7 { top: 70%; right: 2%; width: 100px; --rot: 45deg; }
+
+  @media (max-width: 600px) {
+    .stain.s2, .stain.s3, .stain.s6 { display: none; }
+    .stain { width: 90px !important; }
+  }
+
+  .container {
+    width: 100%;
+    max-width: 640px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    margin-bottom: 2rem;
+    animation: dropIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .crown-stink {
+    font-size: 2.2rem;
+    display: inline-block;
+    animation: wiggle 3s ease-in-out infinite;
+    margin-bottom: 0.5rem;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
+  }
+
+  h1 {
+    font-family: 'Bagel Fat One', cursive;
+    font-size: clamp(2rem, 7vw, 3.4rem);
+    color: var(--pink-hot);
+    line-height: 1.05;
+    letter-spacing: -0.5px;
+    text-shadow:
+      3px 3px 0 var(--bg-soft),
+      6px 6px 0 rgba(255, 110, 165, 0.25);
+    transform: rotate(-2deg);
+    margin: 0.5rem 0;
+  }
+
+  h1 .name {
+    color: var(--no-dark);
+    display: inline-block;
+    transform: rotate(3deg);
+    text-shadow:
+      3px 3px 0 var(--lavender),
+      6px 6px 0 rgba(110, 84, 153, 0.18);
+  }
+
+  .subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    color: var(--text-soft);
+    margin-top: 0.4rem;
+  }
+
+  /* The big card */
+  .card {
+    background: white;
+    border-radius: 32px;
+    padding: 2.5rem 2rem 3rem;
+    box-shadow:
+      0 4px 0 var(--text-soft),
+      0 12px 30px rgba(255, 110, 165, 0.2),
+      0 24px 60px rgba(255, 110, 165, 0.12);
+    border: 4px dashed var(--text-soft);
+    position: relative;
+    animation: dropIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(255, 199, 184, 0.4) 0%, transparent 30%),
+      radial-gradient(circle at 100% 100%, rgba(255, 181, 167, 0.3) 0%, transparent 30%);
+    border-radius: 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card > * { position: relative; z-index: 1; }
+
+  .ribbon {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--text);
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.4rem 1.2rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 3px 0 #d4a83d;
+  }
+
+  .poop-hero {
+    font-size: clamp(8rem, 22vw, 11rem);
+    display: block;
+    margin: 0.5rem auto 0.3rem;
+    line-height: 1;
+    animation: bounce 2.2s ease-in-out infinite;
+    filter: drop-shadow(0 8px 12px rgba(232, 74, 133, 0.3));
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-15px) scale(1.05); }
+  }
+
+  .answer {
+    font-family: 'Bagel Fat One', cursive;
+    font-size: clamp(4rem, 14vw, 6.5rem);
+    line-height: 1;
+    margin: 0.5rem 0;
+    letter-spacing: 1px;
+    transition: all 0.5s ease;
+  }
+
+  .answer.yes {
+    color: var(--yes-dark);
+    text-shadow:
+      4px 4px 0 var(--yes),
+      8px 8px 0 rgba(199, 62, 115, 0.25);
+    animation: celebrate 0.6s ease-out;
+  }
+
+  .answer.no {
+    color: var(--no-dark);
+    text-shadow:
+      4px 4px 0 var(--no),
+      8px 8px 0 rgba(110, 84, 153, 0.25);
+    animation: shake 0.5s ease-out;
+  }
+
+  .answer.unknown {
+    color: var(--text-soft);
+    text-shadow:
+      3px 3px 0 var(--bg-soft),
+      6px 6px 0 rgba(255, 110, 165, 0.15);
+    font-size: clamp(2rem, 7vw, 3.2rem);
+  }
+
+  @keyframes celebrate {
+    0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+    50% { transform: scale(1.2) rotate(5deg); }
+    100% { transform: scale(1) rotate(-2deg); opacity: 1; }
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px) rotate(-2deg); }
+    40% { transform: translateX(10px) rotate(2deg); }
+    60% { transform: translateX(-8px) rotate(-1deg); }
+    80% { transform: translateX(8px) rotate(1deg); }
+  }
+
+  .status-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--pink-hot);
+    margin-top: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .meta {
+    margin-top: 1.5rem;
+    padding-top: 1.2rem;
+    border-top: 2px dotted var(--bg-soft);
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+
+  .meta .date {
+    font-family: 'Caveat', cursive;
+    font-size: 1.2rem;
+    color: var(--pink-hot);
+    margin-top: 0.2rem;
+  }
+
+  /* Confetti for YES */
+  .confetti {
+    position: fixed;
+    top: -20px;
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 100;
+    animation: fall linear forwards;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  /* Loading state */
+  .loading .poop-hero { animation: spin 1.2s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Admin notice */
+  .admin-notice {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: var(--cream);
+    padding: 0.6rem 1.2rem;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    z-index: 200;
+    animation: slideUp 0.4s ease-out;
+  }
+
+  @keyframes slideUp {
+    from { transform: translate(-50%, 100%); opacity: 0; }
+    to { transform: translate(-50%, 0); opacity: 1; }
+  }
+
+  .footer-note {
+    margin-top: 1.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 1.1rem;
+    color: var(--text-soft);
+    opacity: 0.85;
+  }
+
+  /* Stink lines for YES state */
+  .stink-lines {
+    position: absolute;
+    top: 4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .stink-lines.show { opacity: 0.7; }
+  .stink-lines span {
+    display: inline-block;
+    font-size: 1.5rem;
+    margin: 0 0.3rem;
+    animation: rise 2s ease-out infinite;
+  }
+  .stink-lines span:nth-child(2) { animation-delay: 0.4s; }
+  .stink-lines span:nth-child(3) { animation-delay: 0.8s; }
+
+  @keyframes rise {
+    0% { transform: translateY(0); opacity: 0; }
+    30% { opacity: 1; }
+    100% { transform: translateY(-40px); opacity: 0; }
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 2rem 1.2rem 2.5rem; border-radius: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Funny poop stains splattered around -->
+<svg class="stain s1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="g1" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#A06B3C"/>
+      <stop offset="60%" stop-color="#6B4423"/>
+      <stop offset="100%" stop-color="#4A2E15"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g1)" d="M 100 30 C 130 25, 165 45, 170 80 C 178 110, 160 140, 135 155 C 115 168, 85 172, 60 158 C 35 145, 20 115, 28 85 C 35 55, 70 35, 100 30 Z M 175 100 C 185 98, 192 105, 188 115 C 184 122, 175 122, 172 115 Z M 35 165 C 45 168, 48 178, 40 182 C 32 184, 28 175, 35 165 Z"/>
+  <ellipse cx="80" cy="60" rx="18" ry="10" fill="#fff" opacity="0.25"/>
+</svg>
+
+<svg class="stain s2" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="g2" cx="55%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#B07A48"/>
+      <stop offset="55%" stop-color="#7A4F28"/>
+      <stop offset="100%" stop-color="#3E2510"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g2)" d="M 110 20 C 145 18, 185 35, 200 70 C 210 105, 195 135, 165 155 C 140 170, 100 175, 70 165 C 40 152, 18 125, 22 95 C 26 60, 60 30, 110 20 Z M 25 50 C 35 45, 42 55, 35 62 C 28 65, 22 58, 25 50 Z M 200 160 C 210 158, 215 168, 208 175 C 200 178, 195 168, 200 160 Z M 190 30 C 198 28, 203 36, 196 42 C 188 44, 185 35, 190 30 Z"/>
+  <ellipse cx="95" cy="55" rx="22" ry="12" fill="#fff" opacity="0.22"/>
+  <circle cx="55" cy="180" r="7" fill="url(#g2)"/>
+</svg>
+
+<svg class="stain s3" viewBox="0 0 180 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="g3" cx="45%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#996140"/>
+      <stop offset="60%" stop-color="#5C3A1E"/>
+      <stop offset="100%" stop-color="#332010"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g3)" d="M 90 25 C 120 20, 155 40, 160 75 C 165 105, 150 140, 120 160 C 95 175, 60 170, 40 150 C 20 130, 15 95, 28 65 C 42 40, 65 28, 90 25 Z M 155 175 C 168 173, 175 185, 165 192 C 155 195, 148 185, 155 175 Z M 15 35 C 22 30, 30 38, 23 45 C 16 48, 10 40, 15 35 Z"/>
+  <ellipse cx="75" cy="65" rx="20" ry="11" fill="#fff" opacity="0.2"/>
+</svg>
+
+<svg class="stain s4" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="g4" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#A87047"/>
+      <stop offset="55%" stop-color="#6B4423"/>
+      <stop offset="100%" stop-color="#3A2210"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g4)" d="M 105 25 C 145 20, 190 40, 200 80 C 208 115, 185 150, 150 165 C 120 178, 80 175, 50 158 C 25 142, 12 110, 22 78 C 35 45, 70 30, 105 25 Z M 15 110 C 25 108, 30 118, 22 125 C 14 127, 8 118, 15 110 Z M 205 140 C 215 138, 220 148, 213 155 C 205 157, 198 148, 205 140 Z M 165 25 C 172 22, 178 28, 172 35 C 165 37, 160 30, 165 25 Z"/>
+  <ellipse cx="100" cy="55" rx="25" ry="13" fill="#fff" opacity="0.22"/>
+</svg>
+
+<svg class="stain s5" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="g5" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#9D6840"/>
+      <stop offset="60%" stop-color="#5C3A1E"/>
+      <stop offset="100%" stop-color="#2E1A0A"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g5)" d="M 100 28 C 135 25, 170 50, 172 85 C 175 120, 150 155, 115 165 C 80 172, 45 155, 30 125 C 18 95, 30 55, 60 38 C 75 30, 88 28, 100 28 Z M 175 50 C 185 48, 190 58, 183 65 C 175 67, 170 58, 175 50 Z M 25 175 C 35 173, 40 183, 32 190 C 24 192, 18 183, 25 175 Z"/>
+  <ellipse cx="85" cy="60" rx="20" ry="11" fill="#fff" opacity="0.22"/>
+</svg>
+
+<svg class="stain s6" viewBox="0 0 160 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="g6" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#8F5A35"/>
+      <stop offset="60%" stop-color="#5A3A20"/>
+      <stop offset="100%" stop-color="#2E1A0A"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g6)" d="M 80 20 C 110 18, 140 40, 142 70 C 145 100, 125 135, 95 145 C 65 152, 35 135, 22 105 C 12 75, 30 40, 60 25 C 68 22, 75 20, 80 20 Z M 140 145 C 150 142, 155 152, 148 158 C 140 160, 134 152, 140 145 Z"/>
+  <ellipse cx="68" cy="50" rx="17" ry="9" fill="#fff" opacity="0.2"/>
+</svg>
+
+<svg class="stain s7" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="g7" cx="45%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#A36B40"/>
+      <stop offset="55%" stop-color="#6B4423"/>
+      <stop offset="100%" stop-color="#3A2210"/>
+    </radialGradient>
+  </defs>
+  <path fill="url(#g7)" d="M 90 22 C 122 18, 160 38, 162 72 C 165 105, 142 140, 110 152 C 78 162, 42 145, 28 115 C 18 85, 32 48, 62 30 C 72 25, 82 22, 90 22 Z M 25 25 C 32 22, 38 28, 32 35 C 26 37, 22 30, 25 25 Z M 160 155 C 168 153, 172 160, 167 167 C 160 168, 155 160, 160 155 Z"/>
+  <ellipse cx="78" cy="55" rx="19" ry="10" fill="#fff" opacity="0.22"/>
+</svg>
+
+<div class="container">
+  <header class="header">
+    <div class="crown-stink">👑✨</div>
+    <h1>
+      <span class="name">Kübra</span><br>
+      bugün kaka<br>
+      yaptı mı?
+    </h1>
+    <div class="subtitle">~ günlük resmi rapor ~</div>
+  </header>
+
+  <main class="card loading" id="card">
+    <div class="stink-lines" id="stinkLines">
+      <span>~</span><span>~</span><span>~</span>
+    </div>
+    <div class="ribbon">Bugünün Durumu</div>
+    <span class="poop-hero" id="hero">💩</span>
+    <div class="answer unknown" id="answer">...</div>
+    <div class="status-text" id="status">yükleniyor...</div>
+    <div class="meta">
+      <div>Son güncelleme</div>
+      <div class="date" id="updateDate">—</div>
+    </div>
+  </main>
+
+  <div class="footer-note">
+    🌸 Kübra'nın kaka takip merkezi · v1.0 💩
+  </div>
+</div>
+
+<script>
+// Status lives in ./status.json in the same repo.
+// To update: edit status.json on GitHub, commit, done.
+// GitHub Pages rebuilds in ~30s and everyone sees the new value.
+
+const TR_DAYS = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+const TR_MONTHS = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function formatDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  if (isNaN(d)) return '—';
+  const day = TR_DAYS[d.getDay()];
+  const date = d.getDate();
+  const month = TR_MONTHS[d.getMonth()];
+  const hours = String(d.getHours()).padStart(2, '0');
+  const mins = String(d.getMinutes()).padStart(2, '0');
+  return `${day}, ${date} ${month} · ${hours}:${mins}`;
+}
+
+async function loadStatus() {
+  try {
+    const r = await fetch('./status.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return null;
+    const data = await r.json();
+    return (data && data.answer) ? data : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function dropConfetti() {
+  const emojis = ['💩', '✨', '🎉', '⭐', '🌟', '💖'];
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'confetti';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (2 + Math.random() * 2) + 's';
+      el.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+    }, i * 60);
+  }
+}
+
+function render(data) {
+  const card = document.getElementById('card');
+  const answer = document.getElementById('answer');
+  const status = document.getElementById('status');
+  const updateDate = document.getElementById('updateDate');
+  const hero = document.getElementById('hero');
+  const stinkLines = document.getElementById('stinkLines');
+
+  card.classList.remove('loading');
+  answer.classList.remove('yes', 'no', 'unknown');
+  stinkLines.classList.remove('show');
+
+  const today = todayKey();
+  const isToday = data && data.date === today;
+
+  if (!data || !isToday) {
+    answer.textContent = 'henüz bilinmiyor';
+    answer.classList.add('unknown');
+    status.textContent = isToday ? 'rapor bekleniyor 🤔' : 'bugünün raporu henüz girilmedi';
+    hero.textContent = '🚽';
+    updateDate.textContent = data ? formatDate(data.updated) : 'hiç güncellenmedi';
+    return;
+  }
+
+  if (data.answer === 'yes') {
+    answer.textContent = 'EVET! 🎉';
+    answer.classList.add('yes');
+    status.textContent = 'aferin Kübra! sağlıklı bir gün ✨';
+    hero.textContent = '💩';
+    stinkLines.classList.add('show');
+    dropConfetti();
+  } else if (data.answer === 'no') {
+    answer.textContent = 'HAYIR 😔';
+    answer.classList.add('no');
+    status.textContent = 'henüz yok... bol lif ve su tavsiye edilir 🥦💧';
+    hero.textContent = '🚽';
+  } else {
+    answer.textContent = 'henüz bilinmiyor';
+    answer.classList.add('unknown');
+    status.textContent = 'rapor bekleniyor 🤔';
+    hero.textContent = '🤷';
+  }
+
+  updateDate.textContent = formatDate(data.updated);
+}
+
+function showAdminNotice(text) {
+  const el = document.createElement('div');
+  el.className = 'admin-notice';
+  el.textContent = text;
+  document.body.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity 0.5s';
+    el.style.opacity = '0';
+    setTimeout(() => el.remove(), 500);
+  }, 3000);
+}
+
+async function init() {
+  const data = await loadStatus();
+  render(data);
+
+  // Admin mode: ?admin in URL shows a link to edit status.json on GitHub.
+  // Fill in your repo path below if you want this shortcut.
+  if (new URLSearchParams(location.search).has('admin')) {
+    const REPO_EDIT_URL = 'https://github.com/YOUR_USERNAME/YOUR_REPO/edit/main/status.json';
+    showAdminNotice('düzenle: ' + REPO_EDIT_URL);
+    const link = document.createElement('a');
+    link.href = REPO_EDIT_URL;
+    link.target = '_blank';
+    link.textContent = '✏️ status.json düzenle';
+    link.style.cssText = 'position:fixed;bottom:1rem;right:1rem;background:var(--text);color:#fff;padding:.6rem 1rem;border-radius:100px;text-decoration:none;font-family:Fredoka;font-size:.9rem;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.2)';
+    document.body.appendChild(link);
+  }
+}
+
+init();
+
+// Refresh every 30s in case someone else updates
+setInterval(async () => {
+  const data = await loadStatus();
+  render(data);
+}, 30000);
+</script>
+
+</body>
+</html>
